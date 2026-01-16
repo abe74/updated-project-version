@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-md-5">
+        <div class="card p-4 bg-white">
+            <h4 class="text-primary mb-3">🛠️ Admin: Add Match</h4>
+            <form method="POST">
+                <div class="mb-3">
+                    <label>Home Team</label>
+                    <input type="text" name="home_team" class="form-control" placeholder="e.g. Gor Mahia" required>
+                </div>
+                <div class="mb-3">
+                    <label>Away Team</label>
+                    <input type="text" name="away_team" class="form-control" placeholder="e.g. AFC Leopards" required>
+                </div>
+                <div class="mb-3">
+                    <label>Venue</label>
+                    <input type="text" name="venue" class="form-control" placeholder="e.g. Kasarani" required>
+                </div>
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <label>Price (KES)</label>
+                        <input type="number" name="price" class="form-control" placeholder="500" required>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label>Date & Time</label>
+                        <input type="datetime-local" name="date" class="form-control" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Create Match</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <div class="card p-4">
+            <h4>📅 Scheduled Matches</h4>
+            <table class="table table-striped mt-3">
+                <thead>
+                    <tr>
+                        <th>Match</th>
+                        <th>Date</th>
+                        <th>Venue</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for match in matches %}
+                    <tr>
+                        <td><strong>{{ match.home_team }}</strong> vs {{ match.away_team }}</td>
+                        <td>{{ match.date.strftime('%d %b, %H:%M') }}</td>
+                        <td>{{ match.venue }}</td>
+                        <td>{{ match.price }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="4">No matches scheduled yet.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

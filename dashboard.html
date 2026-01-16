@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-4">🏟️ Upcoming FKF Matches</h2>
+<div class="row">
+    {% for match in matches %}
+    <div class="col-md-4 mb-4">
+        <div class="card p-3 h-100">
+            <h5 class="card-title text-primary">{{ match.home_team }} vs {{ match.away_team }}</h5>
+            <p class="card-text">
+                <strong>Venue:</strong> {{ match.venue }}<br>
+                <strong>Date:</strong> {{ match.date.strftime('%d-%b %H:%M') }}<br>
+                <strong>Price:</strong> KES {{ match.price }}
+            </p>
+            <a href="{{ url_for('buy_ticket', match_id=match.id) }}" class="btn btn-success w-100">Buy Ticket (M-Pesa)</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<hr class="my-5">
+
+<h3 class="mb-3">🔄 Resale Market (Fan-to-Fan)</h3>
+{% if resale_tickets %}
+<div class="row">
+    {% for ticket in resale_tickets %}
+    <div class="col-md-3 mb-3">
+        <div class="card p-2 bg-light">
+            <h6>{{ ticket.match.home_team }} vs {{ ticket.match.away_team }}</h6>
+            <small>Seller: {{ ticket.owner.username }}</small>
+            <a href="{{ url_for('buy_resale', ticket_id=ticket.id) }}" class="btn btn-outline-primary btn-sm mt-2">Buy Resale</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-muted">No resale tickets available at the moment.</p>
+{% endif %}
+
+{% endblock %}

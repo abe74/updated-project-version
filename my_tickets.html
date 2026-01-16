@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>🎟️ My Ticket Wallet</h2>
+    <span class="text-muted">User: {{ current_user.username }}</span>
+</div>
+
+<div class="alert alert-info">
+    <strong>📢 Reseller Policy:</strong> You can resell your tickets here if you cannot attend the game. 
+    To ensure fairness for all Kenyan fans, tickets are resold at the <u>Standard Price</u> (Original Purchase Price).
+</div>
+
+<div class="row">
+    {% for ticket in tickets %}
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm border-0 {% if ticket.is_for_sale %}border-warning border-3{% endif %}">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <h5 class="card-title text-primary">{{ ticket.match.home_team }} vs {{ ticket.match.away_team }}</h5>
+                    <span class="badge bg-secondary">KES {{ ticket.match.price }}</span>
+                </div>
+                
+                <p class="card-text text-muted mb-1">
+                    <small>📅 {{ ticket.match.date.strftime('%A, %d %b %Y') }} at {{ ticket.match.date.strftime('%H:%M') }}</small>
+                </p>
+                <p class="card-text text-muted">
+                    <small>📍 {{ ticket.match.venue }}</small>
+                </p>
+                
+                <hr>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>Status: </strong>
+                        {% if ticket.is_for_sale %}
+                            <span class="text-warning fw-bold">List for Resale</span>
+                            <div class="small text-muted">Visible on Marketplace</div>
+                        {% else %}
+                            <span class="text-success fw-bold">Active in Wallet</span>
+                        {% endif %}
+                    </div>
+
+                    <a href="{{ url_for('sell_ticket', ticket_id=ticket.id) }}" 
+                       class="btn {% if ticket.is_for_sale %}btn-outline-danger{% else %}btn-primary{% endif %}">
+                        {% if ticket.is_for_sale %}
+                            Remove from Market
+                        {% else %}
+                            Resell Ticket
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="p-5 text-center bg-light rounded">
+            <h4>No tickets found</h4>
+            <p>You haven't bought any tickets yet. Visit the <a href="{{ url_for('dashboard') }}">Marketplace</a> to buy one.</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
