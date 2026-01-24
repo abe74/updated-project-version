@@ -169,4 +169,12 @@ def seed_data():
         admin = User(username='admin', password=admin_pass, is_admin=True)
         db.session.add(admin)
         db.session.commit()
+
         print("Admin user created (User: admin, Pass: admin123)")
+
+# --- Application Entry Point ---
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()  # Create all database tables
+        seed_data()      # Seed initial admin user
+    app.run(debug=True, port=5000)
